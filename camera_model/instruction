@@ -1,0 +1,4 @@
+rosrun camera_model Calibration -w 8 -h 11 -s 70 -i ~/bag/PX/calib/
+
+rosrun camera_model Calibration -w 9 -h 6 -s 26 --camera-model scaramuzza --camera-name ueye -i /home/jinyao/bagfiles/ueye_chessboard/ -p chess_ --view-results
+

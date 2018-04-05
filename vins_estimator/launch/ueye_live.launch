@@ -1,0 +1,36 @@
+<launch>
+    <arg name="config_path" default = "$(find feature_tracker)/../config/ueye/ueye_config.yaml" />
+	  <arg name="vins_path" default = "$(find feature_tracker)/../config/../" />
+
+    <node name="phidgets_imu_node" pkg="phidgets_imu" type="phidgets_imu_node" >
+	<param name="period" value="4"/>
+    </node>
+
+    <node name="camera" pkg="ueye" type="camera">
+	<param name="frame_rate" value="20"/>
+	<param name="auto_exposure" value="false"/>
+	<param name="auto_gain" value="true"/>
+        <param name="exposure_time" value="10"/>
+    </node>
+    
+    <node name="feature_tracker" pkg="feature_tracker" type="feature_tracker" output="screen">
+        <param name="config_file" type="string" value="$(arg config_path)" />
+        <param name="vins_folder" type="string" value="$(arg vins_path)" />
+    </node>
+
+    <node name="vins_estimator" pkg="vins_estimator" type="vins_estimator" output="log">
+       <param name="config_file" type="string" value="$(arg config_path)" />
+       <param name="vins_folder" type="string" value="$(arg vins_path)" />
+    </node>
+
+    <node name="pose_graph" pkg="pose_graph" type="pose_graph" output="screen">
+        <param name="config_file" type="string" value="$(arg config_path)" />
+        <param name="visualization_shift_x" type="int" value="0" />
+        <param name="visualization_shift_y" type="int" value="0" />
+        <param name="skip_cnt" type="int" value="0" />
+        <param name="skip_dis" type="double" value="0" />
+    </node>
+
+    <node name="rvizvisualisation" pkg="rviz" type="rviz" output="log" args="-d $(find vins_estimator)/../config/vins_rviz_config.rviz" />
+
+</launch>
