@@ -230,6 +230,12 @@ void pubCameraPose(const Estimator &estimator, const std_msgs::Header &header)
 
         pub_camera_pose.publish(odometry);
 
+        // double time_sample = header.stamp.toSec();
+        // double time_publish = ros::Time::now().toSec();
+        // ROS_INFO("sample time:%f",time_sample);
+        // ROS_INFO("publish time:%f",time_publish);
+        // ROS_INFO("camera pose delay:%f",time_publish-time_sample);
+
         cameraposevisual.reset();
         cameraposevisual.add_pose(P, R);
         cameraposevisual.publish_by(pub_camera_pose_visual, odometry.header);

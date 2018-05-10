@@ -57,6 +57,7 @@ ros::Publisher pub_match_points;
 ros::Publisher pub_camera_pose_visual;
 ros::Publisher pub_key_odometrys;
 ros::Publisher pub_vio_path;
+ros::Publisher pub_camera_pose_lc;
 nav_msgs::Path no_loop_path;
 
 std::string BRIEF_PATTERN_FILE;
@@ -275,6 +276,21 @@ void vio_callback(const nav_msgs::Odometry::ConstPtr &pose_msg)
         no_loop_path.header.frame_id = "world";
         no_loop_path.poses.push_back(pose_stamped);
         pub_vio_path.publish(no_loop_path);
+    }
+    
+    if(LOOP_CLOSURE)
+    {
+        geometry_msgs::PoseStamped cemra_pose_lc_msg;
+        cemra_pose_lc_msg.header = pose_msg->header;
+        cemra_pose_lc_msg.header.frame_id = "world";
+        cemra_pose_lc_msg.pose.position.x = vio_t_cam.x();
+        cemra_pose_lc_msg.pose.position.y = vio_t_cam.y();
+        cemra_pose_lc_msg.pose.position.z = vio_t_cam.z();
+        cemra_pose_lc_msg.pose.orientation.w = vio_q_cam.w(); 
+        cemra_pose_lc_msg.pose.orientation.x = vio_q_cam.x(); 
+        cemra_pose_lc_msg.pose.orientation.y = vio_q_cam.y(); 
+        cemra_pose_lc_msg.pose.orientation.z = vio_q_cam.z(); 
+        pub_camera_pose_lc.publish(cemra_pose_lc_msg);
     }
 }
 
@@ -534,6 +550,7 @@ int main(int argc, char **argv)
     pub_key_odometrys = n.advertise<visualization_msgs::Marker>("key_odometrys", 1000);
     pub_vio_path = n.advertise<nav_msgs::Path>("no_loop_path", 1000);
     pub_match_points = n.advertise<sensor_msgs::PointCloud>("match_points", 100);
+    pub_camera_pose_lc = n.advertise<geometry_msgs::PoseStamped>("camera_pose_lc", 1000);
 
     std::thread measurement_process;
     std::thread keyboard_command_process;

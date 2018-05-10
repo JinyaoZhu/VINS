@@ -44,41 +44,40 @@ estimate_extrinsic: 1   # 0  Have an accurate extrinsic parameters. We will trus
 #If you choose 0 or 1, you should write down the following matrix.
 #Rotation from camera frame to imu frame, imu^R_cam
 
+#extrinsicRotation: !!opencv-matrix
+#   rows: 3
+#   cols: 3
+#   dt: d
+#   data: [-1, 0, 0, 
+#           0, 1, 0, 
+#           0, 0, -1]
+#Translation from camera frame to imu frame, imu^T_cam
+#extrinsicTranslation: !!opencv-matrix
+#   rows: 3
+#   cols: 1
+#   dt: d
+#   data: [0.025,-0.010, -0.005]
+
 extrinsicRotation: !!opencv-matrix
    rows: 3
    cols: 3
    dt: d
-   data: [-1, 0, 0, 
-           0, 1, 0, 
-           0, 0, -1]
-#Translation from camera frame to imu frame, imu^T_cam
+   data: [ 4.7319200132306394e-02, -9.9885768623714533e-01,
+       6.6495070355432869e-03, -9.9873811195173234e-01,
+       -4.7199310481095935e-02, 1.7158345642819792e-02,
+       -1.6824893281327340e-02, -7.4530352935001437e-03,
+       -9.9983067327972419e-01 ]
 extrinsicTranslation: !!opencv-matrix
    rows: 3
    cols: 1
    dt: d
-   data: [0.025,-0.010, -0.005]
-
-# extrinsicRotation: !!opencv-matrix
-#    rows: 3
-#    cols: 3
-#    dt: d
-#    data: [ -9.9957177305899680e-01, -2.8651303090020088e-02,
-#        5.9475486494436555e-03, -2.8599291772170233e-02,
-#        9.9955350133598553e-01, 8.6532350657037606e-03,
-#        -6.1928195374941868e-03, 8.4794338381671761e-03,
-#        -9.9994487257446374e-01 ]
-# extrinsicTranslation: !!opencv-matrix
-#    rows: 3
-#    cols: 1
-#    dt: d
-#    data: [ 2.5608938000215003e-02, -2.1176902663175522e-02,
-#        -4.9105462325152553e-03 ]
+   data: [0,0.035,-0.035]
 
 #feature traker paprameters
 max_cnt: 80            # max feature number in feature tracking 150
-min_dist: 20            # min distance between two features 20
+min_dist: 20             # min distance between two features 20
 freq: 10                # frequence (Hz) of publish tracking result. At least 10Hz for good estimation. If set 0, the frequence will be same as raw image 
-F_threshold: 2        # ransac threshold (pixel) 2
+F_threshold: 2          # ransac threshold (pixel) 2
 show_track: 1           # publish tracking image as topic
 equalize: 0             # if image is too dark or light, trun on equalize to find enough features
 fisheye: 1              # if using fisheye, trun on it. A circle mask will be loaded to remove edge noisy points
@@ -86,8 +85,8 @@ track_window_size: 10   # number of frames for calculate the features' score
 
 #optimization parameters
 max_solver_time: 0.04  # max solver itration time (ms), to guarantee real time 0.04
-max_num_iterations: 10   # max solver itrations, to guarantee real time
-keyframe_parallax: 50.0 # keyframe selection threshold (pixel) 10
+max_num_iterations: 10   # max solver itrations, to guarantee real time 10
+keyframe_parallax: 15.0 # keyframe selection threshold (pixel) 10
 
 #imu parameters       The more accurate parameters you provide, the better performance
 acc_n: 0.8          # accelerometer measurement noise standard deviation. #0.2
@@ -97,7 +96,7 @@ gyr_w: 4.0e-3       # gyroscope bias random work noise standard deviation.     #
 g_norm: 9.8100      # gravity magnitude
 
 #loop closure parameters
-loop_closure: 1                    # start loop closure
+loop_closure: 0                    # start loop closure
 load_previous_pose_graph: 0        # load and reuse previous pose graph; load from 'pose_graph_save_path'
 fast_relocalization: 1             # useful in real-time and large project
 pose_graph_save_path: output_path # save and load path
